@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Galería - Piojos Feos 🎉</title>
+  <link rel="stylesheet" href="gallery-styles.css"/>
+</head>
+<body class="page-gallery">
+
+  <!-- BREAKING NEWS BANNER -->
+  <div class="news-banner">
+    <div class="news-badge">📰 ÚLTIMA HORA</div>
+    <div class="news-ticker">
+      <span>🎉 FELICIDADES — SON DOS 🎉 &nbsp;&nbsp;&nbsp; 🎂 HOY CUMPLEN 15 AÑOS LOS PIOJOS MÁS FAMOSOS DEL MUNDO 🎂 &nbsp;&nbsp;&nbsp; 🐛 ALERTA: DOS PIOJOS FEOS HAN SOBREVIVIDO 15 AÑOS 🐛 &nbsp;&nbsp;&nbsp; 🎉 FELICIDADES — SON DOS 🎉 &nbsp;&nbsp;&nbsp;</span>
+    </div>
+  </div>
+
+  <!-- HISTORIA -->
+  <div class="story-overlay" id="storyOverlay">
+    <div class="story-box">
+      <div class="story-icon">🎙️</div>
+      <p class="story-text" id="storyText"></p>
+      <div class="story-progress"><div class="story-bar" id="storyBar"></div></div>
+      <button class="skip-btn" id="skipBtn">Saltar historia →</button>
+    </div>
+  </div>
+
+  <!-- GALERÍA -->
+  <div class="gallery-stage" id="galleryStage" style="display:none;">
+    <h2 class="gallery-title">📸 Sus Mejores Momentos</h2>
+    <div class="carousel-wrap">
+      <div class="carousel-track" id="carouselTrack">
+        <div class="carousel-item photo-item">
+          <img src="fotos/foto1.jpg" alt="Foto 1" onerror="this.parentElement.innerHTML='<div class=\'placeholder-photo\'>📸<br>Foto 1</div>'"/>
+          <p class="item-caption">Los piojos de bebés 🐣</p>
+        </div>
+        <div class="carousel-item photo-item">
+          <img src="fotos/foto2.jpg" alt="Foto 2" onerror="this.parentElement.innerHTML='<div class=\'placeholder-photo\'>📸<br>Foto 2</div>'"/>
+          <p class="item-caption">Qué piojos tan tiernos 💕</p>
+        </div>
+        <div class="carousel-item photo-item">
+          <img src="fotos/foto3.jpg" alt="Foto 3" onerror="this.parentElement.innerHTML='<div class=\'placeholder-photo\'>📸<br>Foto 3</div>'"/>
+          <p class="item-caption">Creciendo juntos 🌱</p>
+        </div>
+        <div class="carousel-item video-item">
+          <video src="videos/video1.mp4" controls onerror="this.parentElement.innerHTML='<div class=\'placeholder-video\'>🎬<br>Video 1</div>'"></video>
+          <p class="item-caption">🎬 El piojo manejando a los 2 años</p>
+        </div>
+        <div class="carousel-item photo-item">
+          <img src="fotos/foto4.jpg" alt="Foto 4" onerror="this.parentElement.innerHTML='<div class=\'placeholder-photo\'>📸<br>Foto 4</div>'"/>
+          <p class="item-caption">Piojo aventurero 🏃</p>
+        </div>
+        <div class="carousel-item photo-item">
+          <img src="fotos/foto5.jpg" alt="Foto 5" onerror="this.parentElement.innerHTML='<div class=\'placeholder-photo\'>📸<br>Foto 5</div>'"/>
+          <p class="item-caption">La piojilla tremenda 😈</p>
+        </div>
+        <div class="carousel-item video-item">
+          <video src="videos/video2.mp4" controls onerror="this.parentElement.innerHTML='<div class=\'placeholder-video\'>🎬<br>Video 2</div>'"></video>
+          <p class="item-caption">🎬 Travesuras de la piojilla</p>
+        </div>
+        <div class="carousel-item photo-item">
+          <img src="fotos/foto6.jpg" alt="Foto 6" onerror="this.parentElement.innerHTML='<div class=\'placeholder-photo\'>📸<br>Foto 6</div>'"/>
+          <p class="item-caption">15 años de travesuras 🎂</p>
+        </div>
+        <div class="carousel-item photo-item">
+          <img src="fotos/foto7.jpg" alt="Foto 7" onerror="this.parentElement.innerHTML='<div class=\'placeholder-photo\'>📸<br>Foto 7</div>'"/>
+          <p class="item-caption">Siempre juntos 👫</p>
+        </div>
+        <div class="carousel-item video-item">
+          <video src="videos/video3.mp4" controls onerror="this.parentElement.innerHTML='<div class=\'placeholder-video\'>🎬<br>Video 3</div>'"></video>
+          <p class="item-caption">🎬 Momentos especiales</p>
+        </div>
+        <div class="carousel-item photo-item">
+          <img src="fotos/foto8.jpg" alt="Foto 8" onerror="this.parentElement.innerHTML='<div class=\'placeholder-photo\'>📸<br>Foto 8</div>'"/>
+          <p class="item-caption">Feliz cumpleaños piojos 🎉</p>
+        </div>
+      </div>
+    </div>
+    <div class="final-message">
+      <div class="final-icon">🎂🐛🐛🎂</div>
+      <h3>¡Feliz Cumpleaños Piojos Feos!</h3>
+      <p>Que sigan cumpliendo muchos años más 💕</p>
+    </div>
+  </div>
+
+  <canvas id="confetti2"></canvas>
+
+<script>
+// ══════════════════════════════════
+// AUDIO REAL — usa historia.wav
+// ══════════════════════════════════
+const audioHistoria = new Audio('historia.wav');
+audioHistoria.preload = 'auto';
+
+function playAudio() {
+  audioHistoria.currentTime = 0;
+  audioHistoria.play().catch(() => {});
+}
+
+function stopAudio() {
+  audioHistoria.pause();
+  audioHistoria.currentTime = 0;
+}
+
+// ══════════════════════════════════
+// SEGMENTOS DE LA HISTORIA
+// ══════════════════════════════════
+const SEG = [
+  { t: "Hace 15 años... nacieron dos piojos feos que lloraban mucho.", d: 5000 },
+  { t: "Se les antojaba hacer todo al mismo tiempo. Un piojo era más negrito que el otro.", d: 5500 },
+  { t: "Pero al ir creciendo... fueron tomando el mismo color.", d: 4500 },
+  { t: "El piojito varón siempre fue más llorón que la piojilla. Pero la piojilla siempre fue más tremenda.", d: 6500 },
+  { t: "Un día el piojito iba manejando cuando tenía dos años de edad. Y se fue a estrellar con la puerta de la casa.", d: 7000 },
+  { t: "Otra vez, el piojillo andaba jugando pelota y se cayó. Ya le habían dicho que se quitara las botas.", d: 6000 },
+  { t: "Se rajó la rodilla y lo llevaron a que le cosieran. Y ese piojillo arrugaba la cara.", d: 6000 },
+  { t: "La piojilla, la dejaron pegada con un carro. Se le torció la patilla y quedó toda panda.", d: 6000 },
+  { t: "También se salió para un baile. Le tomaron foto y ella negaba que era ella.", d: 5500 },
+  { t: "En fin... ahora ya han crecido.", d: 4000 },
+  { t: "Feliz cumpleaños piojos feos. Que sigan cumpliendo muchos años más.", d: 5500 },
+];
+const EMOJIS = ['😢😢','🙈','🐛🐛','😭😈','🚗💥😂','👢😖','🏥😖','🐼😂','💃📸','🌟✨','🎂🎉🥳'];
+
+const elText    = document.getElementById('storyText');
+const elBar     = document.getElementById('storyBar');
+const elOverlay = document.getElementById('storyOverlay');
+const elStage   = document.getElementById('galleryStage');
+const elSkip    = document.getElementById('skipBtn');
+
+let idx = 0, elapsed = 0, stTimer, tyTimer;
+const totalDur = SEG.reduce((a, s) => a + s.d, 0);
+
+function typeIt(txt, el, spd) {
+  clearInterval(tyTimer);
+  el.textContent = '';
+  let i = 0;
+  const chars = [...txt];
+  tyTimer = setInterval(() => {
+    if (i < chars.length) el.textContent += chars[i++];
+    else clearInterval(tyTimer);
+  }, spd);
+}
+
+function showSeg(i) {
+  if (i >= SEG.length) { endStory(); return; }
+  const s = SEG[i];
+  const display = s.t + ' ' + (EMOJIS[i] || '');
+  const spd = Math.max(18, Math.floor(s.d * 0.4 / [...display].length));
+
+  elText.style.opacity   = '0';
+  elText.style.transform = 'translateY(18px)';
+
+  setTimeout(() => {
+    elText.style.transition = 'opacity .5s, transform .5s';
+    elText.style.opacity    = '1';
+    elText.style.transform  = 'translateY(0)';
+    // Arrancar audio solo en el primer segmento
+    if (i === 0) playAudio();
+    typeIt(display, elText, spd);
+  }, 300);
+
+  elapsed += s.d;
+  elBar.style.transition = `width ${s.d}ms linear`;
+  elBar.style.width = ((elapsed / totalDur) * 100) + '%';
+  stTimer = setTimeout(() => { idx++; showSeg(idx); }, s.d);
+}
+
+function endStory() {
+  clearTimeout(stTimer); clearInterval(tyTimer);
+  stopAudio();
+  elOverlay.style.transition = 'opacity .8s';
+  elOverlay.style.opacity    = '0';
+  setTimeout(() => {
+    elOverlay.style.display = 'none';
+    elStage.style.display   = 'flex';
+    startCarousel();
+    startConfetti2();
+  }, 800);
+}
+elSkip.addEventListener('click', endStory);
+
+// ══════════════════════════════════
+// PANTALLA INICIO — desbloquea audio
+// ══════════════════════════════════
+const ss = document.createElement('div');
+ss.style.cssText = 'position:fixed;inset:0;z-index:500;background:rgba(5,0,20,.95);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px)';
+ss.innerHTML = `
+  <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:22px;padding:20px">
+    <div style="font-size:3.5rem">🎂🐛🐛🎂</div>
+    <h2 style="font-family:'Fredoka One',cursive;font-size:clamp(1.8rem,5vw,2.8rem);color:#f5c518;text-shadow:0 0 20px rgba(245,197,24,.5);margin:0">
+      ¡Toca para comenzar!
+    </h2>
+    <p style="font-family:Nunito,sans-serif;color:rgba(255,255,255,.6);margin:0">
+      La historia se leerá en voz alta 🎙️
+    </p>
+    <button id="playBtn" style="padding:16px 52px;background:linear-gradient(135deg,#e0161a,#ff6b9d);color:#fff;border:none;border-radius:50px;font-family:'Fredoka One',cursive;font-size:1.5rem;cursor:pointer;letter-spacing:2px;box-shadow:0 8px 30px rgba(224,22,26,.5)">
+      ▶ Comenzar
+    </button>
+  </div>`;
+document.body.appendChild(ss);
+
+document.getElementById('playBtn').addEventListener('click', () => {
+  ss.style.transition = 'opacity .6s';
+  ss.style.opacity    = '0';
+  setTimeout(() => { ss.remove(); showSeg(0); }, 600);
+});
+
+// ══════════════════════════════════
+// CARRUSEL
+// ══════════════════════════════════
+function startCarousel() {
+  const track = document.getElementById('carouselTrack');
+  const items = Array.from(track.querySelectorAll('.carousel-item'));
+  items.forEach(it => track.appendChild(it.cloneNode(true)));
+  let x = 0, paused = false;
+  const getW = () => items.reduce((s, el) => s + el.offsetWidth + 24, 0);
+  (function anim() {
+    if (!paused) { x -= 0.7; if (Math.abs(x) >= getW()) x = 0; track.style.transform = `translateX(${x}px)`; }
+    requestAnimationFrame(anim);
+  })();
+  function bindV() {
+    track.querySelectorAll('video').forEach(v => {
+      v.addEventListener('play',  () => { paused = true; v.scrollIntoView({ behavior:'smooth', block:'center' }); });
+      v.addEventListener('ended', () => { paused = false; });
+      v.addEventListener('pause', () => { if (!Array.from(track.querySelectorAll('video')).some(x => !x.paused)) paused = false; });
+    });
+  }
+  bindV(); setTimeout(bindV, 500);
+}
+
+// ══════════════════════════════════
+// CONFETTI
+// ══════════════════════════════════
+function startConfetti2() {
+  const cv = document.getElementById('confetti2');
+  const ctx = cv.getContext('2d');
+  cv.width = innerWidth; cv.height = innerHeight;
+  window.addEventListener('resize', () => { cv.width = innerWidth; cv.height = innerHeight; });
+  const C = ['#e0161a','#f5c518','#1db954','#ff6b9d','#fff','#ff9f43'];
+  const ps = Array.from({ length: 60 }, () => ({
+    x: Math.random()*cv.width, y:-20, w:5+Math.random()*8, h:8+Math.random()*12,
+    r:Math.random()*Math.PI*2, vx:(Math.random()-.5)*2, vy:1+Math.random()*2,
+    vr:(Math.random()-.5)*.1, c:C[Math.floor(Math.random()*C.length)]
+  }));
+  (function draw() {
+    ctx.clearRect(0,0,cv.width,cv.height);
+    ps.forEach(p => {
+      p.x+=p.vx; p.y+=p.vy; p.r+=p.vr;
+      if(p.y>cv.height+20){p.y=-20;p.x=Math.random()*cv.width;}
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r);
+      ctx.fillStyle=p.c; ctx.globalAlpha=.75; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); ctx.restore();
+    });
+    requestAnimationFrame(draw);
+  })();
+}
+</script>
+</body>
+</html>
