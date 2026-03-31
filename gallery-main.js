@@ -32,12 +32,53 @@ function speakText(text) {
   window.speechSynthesis.cancel();
   const clean = cleanForSpeech(text);
   if (!clean) return;
-  const utter      = new SpeechSynthesisUtterance(clean);
-  utter.lang       = 'es-MX';
-  utter.rate       = 0.88;
-  utter.pitch      = 1.0;
-  utter.volume     = 1.0;
+
+  const utter    = new SpeechSynthesisUtterance(clean);
+  utter.lang     = 'es-MX';
+  utter.rate     = 0.88;
+  utter.pitch    = 1.0;
+  utter.volume   = 1.0;
   if (ttsVoice) utter.voice = ttsVoice;
+
+  // Fix bug de Chrome: keepalive cada 10 segundos
+  const keepAlive = setInterval(() => {
+    if (window.speechSynthesis.speaking) {
+      window.speechSynthesis.pause();
+      window.speechSynthesis.resume();
+    } else {
+      clearInterval(keepAlive);
+    }
+  }, 10000);
+
+  utter.onend = () => clearInterval(keepAlive);
+  utter.onerror = () => clearInterval(keepAlive);
+
+  window.speechSynthesis.speak(utter);
+}function speakText(text) {
+  window.speechSynthesis.cancel();
+  const clean = cleanForSpeech(text);
+  if (!clean) return;
+
+  const utter    = new SpeechSynthesisUtterance(clean);
+  utter.lang     = 'es-MX';
+  utter.rate     = 0.88;
+  utter.pitch    = 1.0;
+  utter.volume   = 1.0;
+  if (ttsVoice) utter.voice = ttsVoice;
+
+  // Fix bug de Chrome: keepalive cada 10 segundos
+  const keepAlive = setInterval(() => {
+    if (window.speechSynthesis.speaking) {
+      window.speechSynthesis.pause();
+      window.speechSynthesis.resume();
+    } else {
+      clearInterval(keepAlive);
+    }
+  }, 10000);
+
+  utter.onend = () => clearInterval(keepAlive);
+  utter.onerror = () => clearInterval(keepAlive);
+
   window.speechSynthesis.speak(utter);
 }
 
