@@ -1,9 +1,8 @@
-/* gallery-main.js — Página de galería */
-
 // ══════════════════════════════════════
-// TEXT-TO-SPEECH — voz en español
+// TEXT-TO-SPEECH — voz en español (fix corte Chrome)
 // ══════════════════════════════════════
 let ttsVoice = null;
+let keepAliveInterval = null;
 
 function loadVoice() {
   const voices = window.speechSynthesis.getVoices();
@@ -28,27 +27,53 @@ function cleanForSpeech(text) {
     .trim();
 }
 
-function speakText(text) {
-  window.speechSynthesis.cancel();
-  const clean = cleanForSpeech(text);
-  if (!clean) return;
+function splitIntoChunks(text) {
+  // Divide por puntos, comas, puntos suspensivos — frases cortas
+  return text
+    .split(/(?<=[.!?,…])\s+/)
+    .map(s => s.trim())
+    .filter(s => s.length > 0);
+}
 
-  const utter    = new SpeechSynthesisUtterance(clean);
+function speakChunks(chunks, index) {
+  if (index >= chunks.length) return;
+  const utter    = new SpeechSynthesisUtterance(chunks[index]);
   utter.lang     = 'es-MX';
   utter.rate     = 0.88;
   utter.pitch    = 1.0;
   utter.volume   = 1.0;
   if (ttsVoice) utter.voice = ttsVoice;
+  // Cuando termina un chunk, habla el siguiente
+  utter.onend = () => speakChunks(chunks, index + 1);
+  window.speechSynthesis.speak(utter);
+}
 
-  // Fix bug de Chrome: keepalive cada 10 segundos
-  const keepAlive = setInterval(() => {
+function speakText(text) {
+  window.speechSynthesis.cancel();
+  if (keepAliveInterval) { clearInterval(keepAliveInterval); keepAliveInterval = null; }
+  const clean = cleanForSpeech(text);
+  if (!clean) return;
+
+  const chunks = splitIntoChunks(clean);
+  speakChunks(chunks, 0);
+
+  // Keepalive de respaldo por si acaso
+  keepAliveInterval = setInterval(() => {
     if (window.speechSynthesis.speaking) {
       window.speechSynthesis.pause();
       window.speechSynthesis.resume();
     } else {
-      clearInterval(keepAlive);
+      clearInterval(keepAliveInterval);
+      keepAliveInterval = null;
     }
-  }, 10000);
+  }, 8000);
+}
+
+  utter.onend = () => clearInterval(keepAlive);
+  utter.onerror = () => clearInterval(keepAlive);
+
+  window.speechSynthesis.speak(utter);
+}
 
   utter.onend = () => clearInterval(keepAlive);
   utter.onerror = () => clearInterval(keepAlive);
